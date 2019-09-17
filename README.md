@@ -1,7 +1,8 @@
-# web-cfw-loader
-Fusee Launcher, in a browser!
+# Nintendo Switch网页注入器 web-cfw-loader 
+完全中文化的Nintendo Switch网页端注入器！
+精简了很多代码，使其完全适用于中国环境，避免了GWF造成的通讯不畅，打开缓慢问题。
 
-# Description
+# 描述 Description
 This is a port of [fusee-launcher](https://github.com/reswitched/fusee-launcher) to JavaScript using WebUSB. This has been mildly tested and appears to work on Linux, Android (unrooted), OSX and ChromeOS. Today, this only works on Chrome because only Chrome implements WebUSB. It also does NOT work on Windows because the WebUSB Windows implementation does not allow sending the required USB packet.
 
 # Forked
