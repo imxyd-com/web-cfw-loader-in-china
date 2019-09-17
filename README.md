@@ -3,27 +3,16 @@
 精简了很多代码，使其完全适用于中国环境，避免了GWF造成的通讯不畅，打开缓慢问题。
 
 # 描述 Description
-This is a port of [fusee-launcher](https://github.com/reswitched/fusee-launcher) to JavaScript using WebUSB. This has been mildly tested and appears to work on Linux, Android (unrooted), OSX and ChromeOS. Today, this only works on Chrome because only Chrome implements WebUSB. It also does NOT work on Windows because the WebUSB Windows implementation does not allow sending the required USB packet.
+仅适用于Linux、MAC OSX、Android、ChromeOS下的Chrome浏览器使用。
+利用Chrome浏览器的WebUSB功能来完成该功能。
+但是在windows平台下，chrome并不允许使用webusb来发送数据，所以无法使用。
 
-# Forked
-This is also a fork of [web-fusee-launcher](https://github.com/atlas44/web-fusee-launcher), which I fixed up a bit, added hekate 5 and 4, and did some CSS stuff.
 
-# Try it out
-Either use a web server to host the files (must be on https, because of the fact that WebUSB is new technology and therefore has a lot of security restrictions) or you can try it [here](https://webcfw.sdsetup.com/).
+# 分支 fork
+我是github新手，不是很熟悉这里的文化，这里是 https://github.com/AtlasNX/web-cfw-loader 的分支项目。
+本分支是为了解决GWF与一些无法汉化的内容而创建的。
 
-# Contribute to this project
-If you want to add a new translation or update/add a payload, see [CONTRIBUTING](https://github.com/AtlasNX/web-cfw-loader/blob/master/CONTRIBUTING.md).
-
-# Credits
-- [**ElijahZAwesome**](https://github.com/ElijahZAwesome): For creating, maintaining and transferring the repo.
-- [**falquinho**](https://github.com/falquinho): For his Bootstrap layout.
-
-### Translators
-- *Italiano* (Italian) - [**Filo97**](https://github.com/Filo97)
-- *Português* (Portuguese) - [**falquinho**](https://github.com/falquinho)
-- *Deutsch* (German) - [**tumGER**](https://github.com/tumGER)
-- *Español* (Spanish) - [**Lord_Friky**](https://github.com/lordfriky)
-- *Polski* (Polish) - [**Lorek**](https://github.com/lorek123)
-- *简体中文* (Simplified Chinese) - [**Rakau**](https://github.com/Rakau)
-- *繁体中文* (Traditional Chinese) - [**Rakau**](https://github.com/Rakau)
-- *Русский* (Russian) - [**tumGER**](https://github.com/tumGER)
+# 使用方法与案例
+你可以在大多数web服务器上部署本程序，没有什么复杂环境限制。
+对于chrome来说，这个功能有安全性问题，所以只可以在HTTPS下工作。
+这里是我部署的案例：https://ns.imxyd.com/xyd_payload.htm
