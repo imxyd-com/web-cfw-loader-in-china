@@ -9,7 +9,7 @@
 
 
 # 分支 fork
-我是github新手，不是很熟悉这里的文化，这里是 https://github.com/AtlasNX/web-cfw-loader 的分支项目。
+我是github新手，不是很熟悉这里的文化，这里是[web-fusee-launcher](https://github.com/AtlasNX/web-cfw-loader)的分支项目。
 本分支是为了解决GWF与一些无法汉化的内容而创建的。
 
 # 使用方法与案例
