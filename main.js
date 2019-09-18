@@ -7,13 +7,9 @@ const intermezzo = new Uint8Array([
   0x5C, 0xF0, 0x01, 0x40, 0x00, 0x00, 0x02, 0x40, 0x00, 0x00, 0x01, 0x40
 ]);
 
-
-
 const RCM_PAYLOAD_ADDRESS = 0x40010000;
 const INTERMEZZO_LOCATION = 0x4001F000;
 const PAYLOAD_LOAD_BLOCK = 0x40020000;
-
-
 
 function createRCMPayload(intermezzo, payload) {
   const rcmLength = 0x30298;
@@ -37,16 +33,12 @@ function createRCMPayload(intermezzo, payload) {
   return rcmPayload;
 }
 
-
-
 function bufferToHex(data) {
   let result = "";
   for (let i = 0; i < data.byteLength; i++)
     result += data.getUint8(i).toString(16).padStart(2, "0");
   return result;
 }
-
-
 
 async function write(device, data) {
   let length = data.length;
@@ -66,8 +58,6 @@ async function write(device, data) {
   return writeCount;
 }
 
-
-
 function readFileAsArrayBuffer(file) {
   return new Promise((res, rej) => {
     const reader = new FileReader();
@@ -78,44 +68,36 @@ function readFileAsArrayBuffer(file) {
   });
 }
 
-
-
 function logOutput(...message) {
   document.getElementById("output").innerHTML = document.getElementById("output").innerHTML + message.join(" ") + "<br>";
 }
-
-
 
 function clearLog() {
   document.getElementById("output").innerHTML = "";
 }
 
-
-
 let device;
-
-
 
 async function launchPayload(payload) {
   await device.open();
-  logOutput(`Connected to ${device.manufacturerName} ${device.productName}`);
+  logOutput(`连接到 ${device.manufacturerName} ${device.productName}`);
 
   await device.claimInterface(0);
 
   const deviceID = await device.transferIn(1, 16);
-  logOutput(`Device ID: ${bufferToHex(deviceID.data)}`);
+  logOutput(`设备ID: ${bufferToHex(deviceID.data)}`);
 
   const rcmPayload = createRCMPayload(intermezzo, payload);
-  logOutput("Sending payload...");
+  logOutput("注入中...");
   const writeCount = await write(device, rcmPayload);
-  logOutput("Payload sent!");
+  logOutput("注入完毕!");
 
   if (writeCount % 2 !== 1) {
-    logOutput("Switching to higher buffer...");
+    logOutput("切换到高级缓冲区...");
     await device.transferOut(1, new ArrayBuffer(0x1000));
   }
 
-  logOutput("Trigging vulnerability...");
+  logOutput("激活Switch漏洞...");
   const vulnerabilityLength = 0x7000;
   const smash = await device.controlTransferIn({
     requestType: 'standard',
@@ -126,8 +108,6 @@ async function launchPayload(payload) {
   }, vulnerabilityLength);
 }
 
-
-
 document.getElementById("goButton").addEventListener("click", async () => {
   clearLog();
   var debugCheckbox = document.getElementById("shouldDebug");
@@ -135,48 +115,47 @@ document.getElementById("goButton").addEventListener("click", async () => {
 
   if(!debugCheckbox.checked) {
 
-  logOutput("Requesting access to device...");
+  logOutput("请求访问设备...");
   try {
     device = await navigator.usb.requestDevice({ filters: [{ vendorId: 0x0955 }] });
   } catch (error) {
     console.log(error);
-    logOutput("Failed to get a device. Did you chose one?");
+    logOutput("如果不能显示出设备请“看完”如下说明：<br/>1、检查线缆是否连接妥当，设备是否有可能没电。<br/>2、长按电源键15秒强制关机<br/>3、点击发射按钮<br/>4、按下电源键2秒。<br/>5、此时应自动显示出设备。");
     return;
   }
   }
+  
+let payload;
+if (payloadType === "reinx") {
+  payload = reinx;
+} else if (payloadType === "hekate") {
+    payload = hekate;
 
-  let payload;
-  if (payloadType === "CTCaer_Hekate") {
-    payload = CTCaer_Hekate;
+  } else if (payloadType === "biskeydump") {
+    payload = biskeydump;
 
-  } else if (payloadType === "fusee") {
-    payload = fusee;
+  } else if (payloadType === "sxos") {
+    payload = sxos;
 
-  } else if (payloadType === "sx os") {
-    payload = sx;
-
-  } else if (payloadType === "ReiNX") {
-    payload = ReiNX;
-
-  } else if (payloadType === "atmosphere") {
-    payload = fusee_ams;
+  } else if (payloadType === "toyos") {
+    payload = toyos;
 
   } else if (payloadType === "uploaded") {
     const file = document.getElementById("payloadUpload").files[0];
     if (!file) {
-      alert("You need to upload a file, to use an uploaded file.");
+      alert("你还没有选择你需要自定义注入的文件！");
       return;
     }
-    logOutput("Using uploaded payload \"" + file.name + "\"");
+    logOutput("使用您上传的注入文件 \"" + file.name + "\"");
     payload = new Uint8Array(await readFileAsArrayBuffer(file));
 
   } else {
-    logOutput("<span style='color:red'>You're trying to load a payload type that doesn't exist.</span>");
+    logOutput("<span style='color:red'>该文件无效！</span>");
     return;
   }
 
   if(debugCheckbox.checked) {
-    logOutput("Logging payload bytes...");
+    logOutput("记录有效注入...");
 
     var payloadToLog = "";
     for (var i = 0; i < payload.length; i++) {
@@ -188,28 +167,24 @@ document.getElementById("goButton").addEventListener("click", async () => {
     return;
   }
 
-  logOutput(`<span style='color:blue'>Preparing to launch ${payloadType}...</span>`);
+  logOutput(`<span style='color:blue'>准备启动 ${payloadType}...</span>`);
   launchPayload(payload);
 });
 
-
-
 function onSelectChange() {
-  if (document.getElementById("payloadSelect").value === "uploaded")
+  if (document.getElementById("payloadSelect").value === "uploaded"){
     document.getElementById("uploadContainer").style.display = "block"
-  else
+  }
+  else{
     document.getElementById("uploadContainer").style.display = "none"
+  }
 }
-
-
 
 function openInfo() {
   if(document.getElementById("infodiv").innerHTML != "") {
     document.getElementById("infodiv").innerHTML = "";
   }
 }
-
-
 
 function openInstructions() {
   if(document.getElementById("infodiv").innerHTML != "") {
