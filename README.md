@@ -28,3 +28,4 @@
 对于chrome来说，这个功能有安全性问题，所以只可以在HTTPS下工作。
 
 这里是我部署的案例：https://ns.imxyd.com/xyd_payload.htm
+
